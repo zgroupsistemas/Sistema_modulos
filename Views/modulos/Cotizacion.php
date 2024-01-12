@@ -23,11 +23,11 @@
           <!-- Default box -->
           <div class="card">
               <div class="card-header">
-                  <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#modalAgregarClientes">Agregar Cotizacion</button>
+                  <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#modalAgregarCotizacion">Agregar Cotizacion</button>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                  <table id="example1" class="table table-bordered table-striped">
+                  <table id="example1" class="table table-bordered table-striped tablas">
                       <thead>
                           <tr>
                               <th>id </th>
@@ -35,6 +35,7 @@
                               <th>cliente</th>
                               <th>monto</th>
                               <th>asunto</th>
+                              <th>Acciones</th>
 
 
 
@@ -60,20 +61,26 @@
 
                                 $itemCliente = "id";
                                 $valorCliente = $value["cliente_id"];
-              
+
                                 $respuestaCliente = ControladorClientes::ctrMostrarCliente($itemCliente, $valorCliente);
-             
 
-                                if(is_array($respuestaCliente)){
-                                    
-                                    echo '<td>'.$respuestaCliente["cliente"].'</td>';
+
+                                if (is_array($respuestaCliente)) {
+
+                                    echo '<td>' . $respuestaCliente["cliente"] . '</td>';
                                 }
-              
-                                
 
-                               echo' <td>' . $value["monto"] . '</td>';
+                                echo ' <td>' . $value["monto"] . '</td>';
 
-                              echo'  <td>' . $value["asunto"] . '</td>    ';
+                                echo '  <td>' . $value["asunto"] . '</td>    
+                              
+                              <td> <div class="btn-group" role="group" aria-label="Basic example">
+                                <button class="btn btn-warning btnEditarCotizacion" data-toggle="modal" data-target="#modalEditarCotizacion" idCotizacion="' . $value["id"] . '"><i class="fas fa-pen"></i></button>
+                                <button class="btn btn-danger btnEliminarCotizacion" idCotizacion="' . $value["id"] . '"><i class="fas fa-times-circle"></i></button>
+                              </div>
+                              ';
+
+
 
 
                                 echo '</tr>';
@@ -97,69 +104,305 @@
   <!-- /.content-wrapper -->
 
 
-  <!--MODAL DE REGISTRO CLIENTE-->
+  <!--=====================================
+MODAL AGREGAR COTIZACION
+======================================-->
 
-  <div class="modal fade" id="modalAgregarClientes">
+  <div id="modalAgregarCotizacion" class="modal fade" role="dialog">
+
       <div class="modal-dialog">
+
           <div class="modal-content">
-              <form action="" method="post">
-                  <div class="modal-header">
-                      <h4 class="modal-title">Registrar Cliente</h4>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                      </button>
+
+              <form role="form" method="post">
+
+                  <!--=====================================
+  CABEZA DEL MODAL
+  ======================================-->
+
+                  <div class="modal-header" style="background:#3c8dbc; color:white">
+
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                      <h4 class="modal-title">Agregar cliente</h4>
+
                   </div>
+
+                  <!--=====================================
+  CUERPO DEL MODAL
+  ======================================-->
+
                   <div class="modal-body">
 
-                      <div class="row">
-                          <div class="col-6">
-                              <div class="form-group">
-                                  <label for="">Codigo Cliente</label>
-                                  <input type="text" class="form-control" name="nuevoCodigo" placeholder="Codigo">
+                      <div class="box-body">
+
+                          <!-- ENTRADA PARA EL NOMBRE -->
+
+                          <div class="form-group">
+
+                              <div class="input-group">
+
+                                  <span class="input-group-addon"><i class="fa fa-user"></i></span>
+
+                                  <input type="text" class="form-control input-lg" name="nuevoCotizacion" placeholder="Ingresar N° cotizacion" required>
+
                               </div>
-                              <div class="form-group">
-                                  <label>cliente</label>
-                                  <input type="text" class="form-control" name="nuevoCliente" placeholder="Ingresar Nombre">
-                              </div>
-                              <div class="form-group">
-                                  <label>contacto</label>
-                                  <input type="text" class="form-control" name="nuevoContacto" placeholder="Ingresar Numero">
-                              </div>
+
                           </div>
-                          <div class="col-6">
-                              <div class="form-group">
-                                  <label>telefono</label>
-                                  <input type="text" class="form-control" name="nuevoTelefono" placeholder="Ingresar Celular">
+
+                          <!-- ENTRADA PARA EL DOCUMENTO ID -->
+
+                          <!--=====================================
+                ENTRADA DEL CLIENTE
+                ======================================-->
+
+                          <div class="form-group">
+
+                              <div class="input-group">
+
+                                  <span class="input-group-addon"><i class="fa fa-users"></i></span>
+
+                                  <select class="form-control" id="seleccionarCliente" name="seleccionarCliente" required>
+
+                                      <option value="">Seleccionar cliente</option>
+
+                                      <?php
+
+                                        $item = null;
+                                        $valor = null;
+
+                                        $Clientes = ControladorClientes::ctrMostrarCliente($item, $valor);
+
+                                        foreach ($Clientes as $key => $value) {
+
+                                            echo '<option value="' . $value["id"] . '">' . $value["cliente"] . '</option>';
+                                        }
+
+                                        ?>
+
+                                  </select>
+
                               </div>
-                              <div class="form-group">
-                                  <label>email</label>
-                                  <input type="email" class="form-control" name="nuevoCorreo" placeholder="Correo">
-                              </div>
-                              <div class="form-group">
-                                  <label>tiempo contrato</label>
-                                  <input type="text" class="form-control" name="nuevoContrato" placeholder="Contrato">
-                              </div>
+
                           </div>
+                          <!-- ENTRADA PARA EL EMAIL -->
+
+                          <div class="form-group">
+
+                              <div class="input-group">
+
+                                  <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+
+                                  <input type="number" min="0" class="form-control input-lg" name="nuevoMonto" placeholder="Ingresar Monto" required>
+
+                              </div>
+
+                          </div>
+
+                          <!-- ENTRADA PARA EL TELÉFONO -->
+
+                          <div class="form-group">
+
+                              <div class="input-group">
+
+                                  <span class="input-group-addon"><i class="fa fa-phone"></i></span>
+
+                                  <input type="text" class="form-control input-lg" name="nuevoAsunto" placeholder="Ingresar Asunto" required>
+
+                              </div>
+
+                          </div>
+
+
+
+
                       </div>
 
+                  </div>
 
+                  <!--=====================================
+  PIE DEL MODAL
+  ======================================-->
 
+                  <div class="modal-footer">
+
+                      <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Salir</button>
+
+                      <button type="submit" class="btn btn-primary">Guardar Cotizacion</button>
 
                   </div>
-                  <div class="modal-footer justify-content-between">
-                      <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                      <button type="submit" class="btn btn-primary">Registrar Cliente</button>
+
+                  <?php
+                    $crearCotizacion = new ControladorCotizacion();
+                    $crearCotizacion->ctrCrearCotizacion();
+
+                    ?>
+              </form>
+
+          </div>
+
+      </div>
+
+  </div>
+
+
+  <!--=====================================
+MODAL EDITAR COTIZACION
+======================================-->
+
+  <div id="modalEditarCotizacion" class="modal fade" role="dialog">
+
+      <div class="modal-dialog">
+
+          <div class="modal-content">
+
+              <form role="form" method="post">
+
+                  <!--=====================================
+  CABEZA DEL MODAL
+  ======================================-->
+
+                  <div class="modal-header" style="background:#3c8dbc; color:white">
+
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                      <h4 class="modal-title">EDITAR COTIZACION</h4>
+
                   </div>
+
+                  <!--=====================================
+  CUERPO DEL MODAL
+  ======================================-->
+
+                  <div class="modal-body">
+
+                      <div class="box-body">
+
+
+                          <?php
+
+                        
+
+                            $itemCliente = "id";
+                            $valorCliente = $venta["id_cliente"];
+
+                            $cliente = ControladorClientes::ctrMostrarCliente($itemCliente, $valorCliente);
+
+
+
+                            ?>
+
+
+                          <!-- ENTRADA PARA EL NOMBRE -->
+
+                          <div class="form-group">
+
+                              <div class="input-group">
+
+                                  <span class="input-group-addon"><i class="fa fa-user"></i></span>
+
+                                  <input type="text" class="form-control input-lg" name="editarCotizacion" id="editarCotizacion" placeholder="Ingresar N° cotizacion" required>
+                                  <input type="hidden" id="idCotizacion" name="idCotizacion">
+                              </div>
+
+                          </div>
+
+                          <!-- ENTRADA PARA EL DOCUMENTO ID -->
+
+                          <!--=====================================
+                ENTRADA DEL CLIENTE
+                ======================================-->
+
+                          <div class="form-group">
+
+                              <div class="input-group">
+
+                                  <span class="input-group-addon"><i class="fa fa-users"></i></span>
+
+                                  <select class="form-control" id="seleccionarCliente" name="seleccionarCliente" required>
+
+                                      <option value="<?php echo $cliente["id"]; ?>"><?php echo $cliente["nombre"]; ?></option>
+
+                                      <?php
+
+                                        $item = null;
+                                        $valor = null;
+
+                                        $categorias = ControladorClientes::ctrMostrarCliente($item, $valor);
+
+                                        foreach ($categorias as $key => $value) {
+
+                                            echo '<option value="' . $value["id"] . '">' . $value["cliente"] . '</option>';
+                                        }
+
+                                        ?>
+
+                                  </select>
+
+
+
+                              </div>
+
+                          </div>
+                          <!-- ENTRADA PARA EL EMAIL -->
+
+                          <div class="form-group">
+
+                              <div class="input-group">
+
+                                  <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+
+                                  <input type="number" min="0" class="form-control input-lg" name="editarMonto" id="editarMonto" placeholder="Ingresar Monto" required>
+
+                              </div>
+
+                          </div>
+
+                          <!-- ENTRADA PARA EL TELÉFONO -->
+
+                          <div class="form-group">
+
+                              <div class="input-group">
+
+                                  <span class="input-group-addon"><i class="fa fa-phone"></i></span>
+
+                                  <input type="text" class="form-control input-lg" name="editarAsunto" id="editarAsunto" placeholder="Ingresar Asunto" required>
+
+                              </div>
+
+                          </div>
+
+
+
+
+                      </div>
+
+                  </div>
+
+                  <!--=====================================
+  PIE DEL MODAL
+  ======================================-->
+
+                  <div class="modal-footer">
+
+                      <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Salir</button>
+
+                      <button type="submit" class="btn btn-primary">Guardar Cotizacion</button>
+
+                  </div>
+
 
               </form>
 
-              <?php
-                $crearCliente = new ControladorClientes();
-                $crearCliente->ctrCrearCliente();
-                ?>
-
           </div>
-          <!-- /.modal-content -->
+
       </div>
-      <!-- /.modal-dialog -->
+
   </div>
+
+  <?php
+
+    $eliminarCotizacion = new ControladorCotizacion();
+    $eliminarCotizacion->ctrEliminarCotizacion();
+
+    ?>

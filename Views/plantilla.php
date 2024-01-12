@@ -1,8 +1,4 @@
-<?php
 
-session_start();
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -39,7 +35,7 @@ session_start();
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
-<body class="hold-transition sidebar-mini layout-fixed">
+<body class="hold-transition sidebar-mini layout-fixed ">
   <div class="wrapper">
 
     <!-- Preloader -->
@@ -47,13 +43,28 @@ session_start();
     <img class="animation__shake" src="Views/Assets/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
   </div> -->
 
-  <?php
-  include "modulos/navbar.php";
-include "modulos/sidebar.php";
-include "modulos/Clientes.php";
+    <?php
 
-?>
-    
+    include "modulos/navbar.php";
+    include "modulos/sidebar.php";
+
+    if(isset($_GET["ruta"])){
+
+      if($_GET["ruta"] == "inicio" ||
+      $_GET["ruta"] == "Clientes" ||
+      $_GET["ruta"] == "Cotizacion"
+     ){
+
+     include "modulos/".$_GET["ruta"].".php";
+
+   }
+
+    }
+  
+
+
+    ?>
+
 
     <!-- Control Sidebar -->
     <aside class="control-sidebar control-sidebar-dark">
@@ -110,6 +121,8 @@ include "modulos/Clientes.php";
   <script src="Views/Assets/dist/js/demo.js"></script>
   <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
   <script src="Views/Assets/dist/js/pages/dashboard.js"></script>
+  <script src="Views/Assets/js/Clientes.js"></script>
+  <script src="Views/Assets/js/Cotizacion.js"></script>
   <script>
     $(function() {
       $("#example1").DataTable({

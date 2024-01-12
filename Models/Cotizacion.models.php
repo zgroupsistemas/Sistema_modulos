@@ -31,5 +31,58 @@ class ModeloCotizacion
 	}
 
 
+		//REGISTRAR CLIENTES
+		static public function mdlIngresarCotizacion($tabla, $datos){
+
+			$stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(numero_cotizacion,cliente_id ,monto,asunto) VALUES (:numero_cotizacion,:cliente_id ,:monto,:asunto)");
+	
+			$stmt->bindParam(":numero_cotizacion", $datos["cotizacion"], PDO::PARAM_STR);
+			$stmt->bindParam(":cliente_id", $datos["cliente"], PDO::PARAM_INT);
+			 $stmt->bindParam(":monto", $datos["monto"], PDO::PARAM_INT);
+			 $stmt->bindParam(":asunto", $datos["asunto"], PDO::PARAM_STR);
+			
+	
+		
+			if($stmt->execute()){
+	
+				return "ok";
+	
+			}else{
+	
+				return "error";
+			
+			}
+	
+			$stmt->close();
+			$stmt = null;
+	
+		}
+	
+		//Editar CLIENTES
+	
+	
+	
+		//ELIMINAR CLIENTE
+	
+		static public function mdlEliminarCotizacion($tabla,$datos){
+			
+			$stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id = :id");
+	
+			$stmt -> bindParam(":id", $datos, PDO::PARAM_INT);
+	
+			if($stmt -> execute()){
+	
+				return "ok";
+			
+			}else{
+	
+				return "error";	
+	
+			}
+	
+			$stmt -> close();
+	
+			$stmt = null;
+		}
 	
 }
